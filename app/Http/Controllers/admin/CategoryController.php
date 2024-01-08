@@ -36,10 +36,12 @@ class CategoryController extends Controller
                 $category->name = $request->name;
                 $category->slug = $request->slug;
                 $category->status = $request->status;
+                $category->showHome = $request->showHome;
                 $category->save();
 
                 //Save Image Here
                 if (!empty($request->image_id)){
+
                     $tempImage = TempImage::find($request ->image_id);
                     $extArray = explode('.',$tempImage->name);
                     $ext = last($extArray);
@@ -69,11 +71,12 @@ class CategoryController extends Controller
                     'status' => true,
                     'message' =>'categories added successfully'
                 ]);
-            }else{
-                return response()->json([
-                    'status' => false,
-                    'errors' =>$validator->errors()
-                ]);
+            }
+            else{
+                    return response()->json([
+                        'status' => false,
+                        'errors' =>$validator->errors()
+                    ]);
             }
     }
     public function edit($categoryId, Request $request){
@@ -136,6 +139,7 @@ class CategoryController extends Controller
             $category->name = $request->name;
             $category->slug = $request->slug;
             $category->status = $request->status;
+            $category->showHome = $request->showHome;
             $category->save();
 
             $request->session()->flash('success', 'Category updated successfully');

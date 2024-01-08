@@ -9,6 +9,9 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSubCategoryController;
+use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -23,9 +26,13 @@ use Illuminate\Support\Str;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+Route::get('/',[FrontController::class,'index'])->name('front.home');
+Route::get('/shop',[ShopController::class,'index'])->name('front.shop');
+
+
 Route::group(['prefix' => 'admin'],function (){
 //    admin
     Route::group(['middlewere' => 'admin.guest'],function (){
@@ -73,6 +80,10 @@ Route::group(['prefix' => 'admin'],function (){
 
 //              temp-images.create
               Route::post('/upload-temp-image',[TempImagesController::class,'create'])->name('temp-images.create');
+
+//              Product Images update route
+              Route::post('/product-image/update',[ProductImageController::class,'update'])->name('product-images.update');
+              Route::delete('/products-images',[ProductImageController::class,'destroy'])->name('product-images.destroy');
 
               //----------------slug-------------->
               Route::get('/getSlug', function (Request $request) {

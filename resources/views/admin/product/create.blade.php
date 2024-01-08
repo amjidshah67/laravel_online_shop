@@ -229,18 +229,12 @@
                     $("button[type='submit']").prop('disabled',false);
 
                     if (response['status'] === true){
+                        $(".error").removeClass('invalid-feedback').html('');
+                        $("input[type='text'], select ,input[type='number']").removeClass('is-invalid');
 
+                        window.location.href="{{ route("products.index") }}";
                     }else {
                         var errors = response['errors'];
-
-                        // if(erorrs['title']){
-                        //     $("#title").addClass('is-invalid').siblings('p')
-                        //         .addClass('inavalid-feedback').html(erorrs['title']);
-                        // }
-                        // else {
-                        //     $("#title").removeClass('is-invalid').siblings('p')
-                        //         .removeClass('inavalid-feedback').html("");
-                        // }
 
                         $(".error").removeClass('invalid-feedback').html('');
                         $("input[type='text'], select ,input[type='number']").removeClass('is-invalid');
@@ -256,14 +250,14 @@
                 }
             })
         })
-    // roductSubCategory
+    // product Sub Category
         $("#category").change(function () {
             var category_id = $(this).val();
             $.ajax({
                 url: '{{ route("product-subcategories.index") }}',
                 type: 'get',
                 data: {category_id:category_id},
-                dataType: 'json', // Corrected from 'datatype' to 'dataType'
+                dataType: 'json',
                 success: function (response) {
                     $("#sub_category").find("option").not(":first").remove();
                     $.each(response["subCategory"],function(key,item) {
@@ -280,13 +274,6 @@
 
 Dropzone.autoDiscover = false;
 const dropzone = $("#image").dropzone({
-    init: function() {
-        this.on('addedfile', function(file) {
-            if (this.files.length > 1) {
-                this.removeFile(this.files[0]);
-            }
-        });
-    },
     url:  "{{ route('temp-images.create') }}",
     maxFiles: 10,
     paramName: 'image',
@@ -298,17 +285,27 @@ const dropzone = $("#image").dropzone({
         // $("#image_id").val(response.image_id);
         // console.log(response)
 
-           var html = `<div class="card">
-                <img src="${response.imagePath}" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                        <a href="#" class="btn btn-primary">Go somewhere</a>
+        var html = `
+                <div class="col-md-3" id="image_row-${response.image_id}">
+                    <div class="card">
+                        <input type="hidden" name="image_array[]" value="${response.image_id}">
+                        <img src="${response.imagePath}" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <a href="javascript:void(0)" onclick="deleteIaage(${response.image_id})" class="btn btn-danger delete-image">Delete</a>
+                        </div>
                     </div>
-            </div>`
+                </div>`;
 
+        $("#product-gallery").append(html);
+    },
+    complete : function (file) {
+        this.removeFile(file);
     }
 });
+
+    function deleteIaage(id) {
+        $("#image_row-"+id).remove();
+    }
 
     </script>
 @endsection
