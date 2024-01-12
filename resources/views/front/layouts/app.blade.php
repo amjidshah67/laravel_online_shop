@@ -33,6 +33,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('front/css/slick.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front/css/slick-theme.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('front/css/ion.rangeSlider.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front/css/video-js.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('front/css/style.css?v=') }}" <?php echo rand(111,999); ?> />
 
@@ -215,6 +216,7 @@
 <script src="{{ asset('front/js/instantpages.5.1.0.min.js') }}"></script>
 <script src="{{ asset('front/js/lazyload.17.6.0.min.js') }}"></script>
 <script src="{{ asset('front/js/slick.min.js') }}"></script>
+<script src="{{ asset('front/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('front/js/custom.js') }}"></script>
 <script>
     window.onscroll = function() {myFunction()};
@@ -230,5 +232,6 @@
         }
     }
 </script>
+@yield('customJs')
 </body>
 </html>
