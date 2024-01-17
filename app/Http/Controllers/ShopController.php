@@ -58,7 +58,8 @@ class ShopController extends Controller
         }else{
             $products = $products->orderBy('id','DESC');
         }
-        $products = $products->get();
+        $products = $products->paginate(6);
+
         $data['categories'] = $categories;
         $data['brands'] = $brands;
         $data['products'] = $products;
@@ -70,5 +71,22 @@ class ShopController extends Controller
         $data['sort'] = $request->get('sort');
 
         return view('front.shop' ,$data);
+    }
+    public function product($slug){
+//        echo $slug;
+        $product = Product::where('slug',$slug)->with('product_images')->first();
+        if ($product == null){
+            abort(404);
+        }
+
+        $relatadProducts = [];
+        // Fetch related product
+        if ($product->related_products != ''){
+            $productArray = explode(',',$product->related_products);
+            $relatadProducts = Product::wherein('id',$productArray)->with('product_images')->get();
+        }
+        $data['product'] = $product;
+        $data['relatadProducts'] = $relatadProducts;
+        return view('front.product',$data);
     }
 }

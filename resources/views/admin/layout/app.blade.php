@@ -3,6 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+{{--    <meta name="csrf-token" content="2mHeQivILztRLR1RGKGQEm7b3eQm1YTQFciicXJ9" />--}}
+
     <title>Laravel Shop :: Administrative Panel</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -12,6 +14,7 @@
     <link rel="stylesheet" href="{{ asset('admin/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/dropzone/min/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
 
 
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
@@ -90,10 +93,10 @@
 
 <script src="{{ asset('admin/plugins/dropzone/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('admin/plugins/summernote/summernote.min.js') }}"></script>
+<script src="{{ asset('admin/plugins/select2/js/select2.min.js') }}"></script>
 
 <!-- AdminLTE for demo purposes -->
 <script src="{{ asset('admin/js/demo.js') }}"></script>
-<meta name="csrf-token" content="2mHeQivILztRLR1RGKGQEm7b3eQm1YTQFciicXJ9" />
 <script>
         $.ajaxSetup({
         headers: {

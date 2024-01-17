@@ -100,7 +100,7 @@
                         window.location.href="{{ route('categories.index') }}";
 
                         $("#name").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
-                        $("#slug").addClass('is-invalid').siblings('p').addClass('invalid-feedback').html(response.errors.slug);
+                        $("#slug").removeClass('is-invalid').siblings('p').removeClass('invalid-feedback').html("");
                     } else {
                         // Handle error response
                         var errors = response.errors;

@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ProductSubCategoryController;
 use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -31,7 +32,12 @@ use Illuminate\Support\Str;
 //});
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
-
+Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
+Route::get('/cart',[CartController::class,'cart'])->name('front.cart');
+Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('front.addToCart');
+Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
+Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
+Route::delete('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
 
 Route::group(['prefix' => 'admin'],function (){
 //    admin
@@ -74,6 +80,7 @@ Route::group(['prefix' => 'admin'],function (){
               Route::get('/products{product}/edit',[ProductController::class,'edit'])->name('products.edit');
               Route::put('/products/{product}',[ProductController::class,'update'])->name('products.update');
               Route::delete('/products/{product}',[ProductController::class,'destroy'])->name('products.delete');
+              Route::get('/get-products',[ProductController::class,'getProducts'])->name('products.getProducts');
 
               //          product    Sub category Route
               Route::get('/product-subcategories',[ProductSubCategoryController::class,'index'])->name('product-subcategories.index');

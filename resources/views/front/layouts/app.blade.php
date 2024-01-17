@@ -29,6 +29,7 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:image:alt" content="" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="csrf-token" content="{{ @csrf_token() }}" />
 
 
     <link rel="stylesheet" type="text/css" href="{{ asset('front/css/slick.css') }}" />
@@ -51,7 +52,7 @@
     <div class="container">
         <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
             <div class="col-lg-4 logo">
-                <a href="index.php" class="text-decoration-none">
+                <a href="{{ route('front.home') }}" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                     <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                 </a>
@@ -74,7 +75,7 @@
 <header class="bg-dark">
     <div class="container">
         <nav class="navbar navbar-expand-xl" id="navbar">
-            <a href="index.php" class="text-decoration-none mobile-logo">
+            <a href="{{ route('front.home') }}" class="text-decoration-none mobile-logo">
                 <span class="h2 text-uppercase text-primary bg-dark">Online</span>
                 <span class="h2 text-uppercase text-white px-2">SHOP</span>
             </a>
@@ -96,7 +97,7 @@
                                 @if($category->sub_category->isNotEmpty())
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         @foreach($category->sub_category as $subcategory)
-                                            <li><a class="dropdown-item nav-link" href="#">{{ $subcategory->name }}</a></li>
+                                            <li><a class="dropdown-item nav-link" href="{{ route('front.shop',[$category->slug, $subcategory->slug]) }}">{{ $subcategory->name }}</a></li>
                                         @endforeach
                                     </ul>
                                 @endif
@@ -104,51 +105,10 @@
                             </li>
                         @endforeach
                     @endif
-                    {{--                    <li class="nav-item dropdown">--}}
-                    {{--                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">--}}
-                    {{--                            Men's Fashion--}}
-                    {{--                        </button>--}}
-                    {{--                        <ul class="dropdown-menu dropdown-menu-dark">--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Shirts</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Jeans</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Shoes</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Watches</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Perfumes</a></li>--}}
-                    {{--                        </ul>--}}
-                    {{--                    </li>--}}
-                    {{--                    <li class="nav-item dropdown">--}}
-                    {{--                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">--}}
-                    {{--                            Women's Fashion--}}
-                    {{--                        </button>--}}
-                    {{--                        <ul class="dropdown-menu dropdown-menu-dark">--}}
-                    {{--                            <li><a class="dropdown-item" href="#">T-Shirts</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Tops</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Jeans</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Shoes</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Watches</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Perfumes</a></li>--}}
-                    {{--                        </ul>--}}
-                    {{--                    </li>--}}
-
-                    {{--                    <li class="nav-item dropdown">--}}
-                    {{--                        <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">--}}
-                    {{--                            Appliances--}}
-                    {{--                        </button>--}}
-                    {{--                        <ul class="dropdown-menu dropdown-menu-dark">--}}
-                    {{--                            <li><a class="dropdown-item" href="#">TV</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Washing Machines</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Air Conditioners</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Vacuum Cleaner</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Fans</a></li>--}}
-                    {{--                            <li><a class="dropdown-item" href="#">Air Coolers</a></li>--}}
-                    {{--                        </ul>--}}
-                    {{--                    </li>--}}
-
-
                 </ul>
             </div>
             <div class="right-nav py-0">
-                <a href="cart.php" class="ml-3 d-flex pt-2">
+                <a href="{{ route('front.cart') }}" class="ml-3 d-flex pt-2">
                     <i class="fas fa-shopping-cart text-primary"></i>
                 </a>
             </div>
@@ -230,6 +190,27 @@
         } else {
             navbar.classList.remove("sticky");
         }
+    }
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    function addToCart(id) {
+        $.ajax({
+            url: '{{ route("front.addToCart") }}',
+            type: 'post',
+            data:{id:id},
+            datatype: 'json',
+            success:function (response){
+                if(response.status === true){
+                    window.location.href= "{{ route('front.cart') }}"
+                }else {
+                    alert(response.message);
+                }
+            }
+        });
     }
 </script>
 @yield('customJs')
