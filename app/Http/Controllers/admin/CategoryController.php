@@ -37,7 +37,7 @@ class CategoryController extends Controller
                 $category->slug = $request->slug;
                 $category->status = $request->status;
                 $category->showHome = $request->showHome;
-                $category->save();
+//                $category->save();
 
                 //Save Image Here
                 if (!empty($request->image_id)){

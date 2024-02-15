@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\ProductImageController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\AuthController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -38,6 +40,9 @@ Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('front.add
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
 Route::delete('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
+
+Route::get('/register', [AuthController::class,'register'])->name('account.register');
+Route::post('/process-register', [AuthController::class,'processRegister'])->name('account.processRegister');
 
 Route::group(['prefix' => 'admin'],function (){
 //    admin
