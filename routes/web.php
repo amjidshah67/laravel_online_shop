@@ -14,7 +14,6 @@ use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AuthController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -41,8 +40,27 @@ Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.up
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
 Route::delete('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
 
-Route::get('/register', [AuthController::class,'register'])->name('account.register');
-Route::post('/process-register', [AuthController::class,'processRegister'])->name('account.processRegister');
+
+
+Route::group(['prefix' => 'account'],function (){
+    Route::group(['middlewere' => 'guest'],function () {
+
+        Route::get('/login',[AuthController::class,'login'])->name('account.login');
+        Route::post('/login',[AuthController::class,'authenticate'])->name('account.authenticate');
+
+        Route::get('/register',[AuthController::class,'register'])->name('account.register');
+        Route::post('/process-register',[AuthController::class,'processRegister'])->name('account.processRegister');
+
+
+    });
+    Route::group(['middlewere' => 'auth'],function () {
+        Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
+        Route::get('/logout',[AuthController::class,'logout'])->name('account.logout');
+
+    });
+});
+
+
 
 Route::group(['prefix' => 'admin'],function (){
 //    admin
