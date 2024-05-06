@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('admin/plugins/summernote/summernote-bs4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/plugins/select2/css/select2.min.css') }}">
 
+    <link rel="stylesheet" href="{{ asset('admin/css/datetimepicker.css') }}">
 
     <link rel="stylesheet" href="{{ asset('admin/css/custom.css') }}">
     <meta name="csrf-token" content="{{ @csrf_token() }}" />
@@ -96,6 +97,8 @@
 <script src="{{ asset('admin/plugins/select2/js/select2.min.js') }}"></script>
 
 <!-- AdminLTE for demo purposes -->
+<script src="{{ asset('admin/js/datetimepicker.js') }}"></script>
+
 <script src="{{ asset('admin/js/demo.js') }}"></script>
 <script>
         $.ajaxSetup({

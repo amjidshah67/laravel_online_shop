@@ -10,6 +10,9 @@ use App\Http\Controllers\Admin\BrandsController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductSubCategoryController;
 use App\Http\Controllers\Admin\ProductImageController;
+use App\Http\Controllers\Admin\ShippingController;
+use App\Http\Controllers\Admin\DiscountCodeController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
@@ -31,6 +34,11 @@ use Illuminate\Support\Str;
 //Route::get('/', function () {
 //    return view('welcome');
 //});
+
+// Route::get('/test', function () {
+//    orderEmail(44);
+// });
+
 Route::get('/',[FrontController::class,'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}',[ShopController::class,'index'])->name('front.shop');
 Route::get('/product/{slug}',[ShopController::class,'product'])->name('front.product');
@@ -39,11 +47,18 @@ Route::post('/add-to-cart',[CartController::class,'addToCart'])->name('front.add
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
 Route::post('/update-cart',[CartController::class,'updateCart'])->name('front.updateCart');
 Route::delete('/delete-item',[CartController::class,'deleteItem'])->name('front.deleteItem.cart');
+Route::get('/checkout',[CartController::class,'checkout'])->name('front.checkout');
+Route::post('/process-checkout',[CartController::class,'processCheckout'])->name('front.processCheckout');
+Route::get('/thanks/{orderId}',[CartController::class,'thankyou'])->name('front.thankyou');
+Route::post('/get-order-summery',[CartController::class,'getOrderSummery'])->name('front.getOrderSummery');
+Route::post('/apply-discount',[CartController::class,'applyDiscount'])->name('front.applyDiscount');
+Route::post('/remove-discount',[CartController::class,'removeCoupon'])->name('front.removeCoupon');
+Route::post('/add-to-wishlist',[FrontController::class,'addToWishlist'])->name('front.addToWishlist');
 
 
 
 Route::group(['prefix' => 'account'],function (){
-    Route::group(['middlewere' => 'guest'],function () {
+    Route::group(['middleware' => 'guest'],function () {
 
         Route::get('/login',[AuthController::class,'login'])->name('account.login');
         Route::post('/login',[AuthController::class,'authenticate'])->name('account.authenticate');
@@ -53,13 +68,16 @@ Route::group(['prefix' => 'account'],function (){
 
 
     });
-    Route::group(['middlewere' => 'auth'],function () {
+    Route::group(['middleware' => 'auth'],function () {
         Route::get('/profile',[AuthController::class,'profile'])->name('account.profile');
+        Route::get('/my-orders',[AuthController::class,'orders'])->name('account.orders');
+        Route::get('/my-wishlist',[AuthController::class,'wishlist'])->name('account.wishlist');
+        Route::post('/remove-Product-from-wishlist',[AuthController::class,'removeProductFromWishlist'])->name('account.removeProductFromWishlist');
+        Route::get('/order-detail/{orderId}',[AuthController::class,'orderDetail'])->name('account.orderDetail');
         Route::get('/logout',[AuthController::class,'logout'])->name('account.logout');
 
     });
 });
-
 
 
 Route::group(['prefix' => 'admin'],function (){
@@ -114,6 +132,30 @@ Route::group(['prefix' => 'admin'],function (){
 //              Product Images update route
               Route::post('/product-image/update',[ProductImageController::class,'update'])->name('product-images.update');
               Route::delete('/products-images',[ProductImageController::class,'destroy'])->name('product-images.destroy');
+
+//              shipping route
+              Route::get('/shipping/create',[ShippingController::class,'create'])->name('shipping.create');
+              Route::post('/shipping',[ShippingController::class,'store'])->name('shipping.store');
+              Route::get('/shipping/{id}',[ShippingController::class,'edit'])->name('shipping.edit');
+              Route::put('/shipping/{id}',[ShippingController::class,'update'])->name('shipping.update');
+              Route::delete('/shipping/{id}',[ShippingController::class,'destroy'])->name('shipping.destroy');
+
+              //       Coupon Code route
+
+              Route::get('/coupons',[DiscountCodeController::class,'index'])->name('coupons.index');
+              Route::get('/coupons/create',[DiscountCodeController::class,'create'])->name('coupons.create');
+              Route::post('/coupons',[DiscountCodeController::class,'store'])->name('coupons.store');
+              Route::get('/coupons{coupon}/edit',[DiscountCodeController::class,'edit'])->name('coupons.edit');
+              Route::put('/coupons/{coupon}',[DiscountCodeController::class,'update'])->name('coupons.update');
+              Route::delete('/coupons/{coupon}',[DiscountCodeController::class,'destroy'])->name('coupons.delete');
+
+              //  orders route
+
+              Route::get('/orders',[OrderController::class,'index'])->name('orders.index');
+              Route::get('/orders/{id}',[OrderController::class,'detail'])->name('orders.detail');
+              Route::get('/order/change-status/{id}',[OrderController::class,'changeOrderStatus'])->name('orders.changeOrderStatus');
+              Route::get('/order/send-email/{id}',[OrderController::class,'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
+
 
               //----------------slug-------------->
               Route::get('/getSlug', function (Request $request) {

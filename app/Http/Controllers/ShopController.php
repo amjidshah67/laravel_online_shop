@@ -47,6 +47,10 @@ class ShopController extends Controller
                 }
         }
 
+        if(!empty($request->get('search'))){
+            $products = $products->where('title','like','%'.$request->get('search').'%');
+        }
+
         if ($request->get('sort') != ''){
             if ($request->get('sort') == 'latest'){
                 $products = $products->orderBy('id','DESC');
@@ -83,7 +87,7 @@ class ShopController extends Controller
         // Fetch related product
         if ($product->related_products != ''){
             $productArray = explode(',',$product->related_products);
-            $relatadProducts = Product::wherein('id',$productArray)->with('product_images')->get();
+            $relatadProducts = Product::wherein('id',$productArray)->where('status',1)->get();
         }
         $data['product'] = $product;
         $data['relatadProducts'] = $relatadProducts;
